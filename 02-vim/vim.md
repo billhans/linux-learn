@@ -82,6 +82,8 @@ set showcmd "显示输入的命令
 set cursorline "光标所在行添加横线显示
 set shiftwidth=4 "设置每次缩进的宽度
 set cindent "C语言缩进规则
-set path +=.,/usr/include "使用gf命令查找的目录set fileencodings=utf 8,gb18030,gbk,gb2312filetype indent on "文件类型检查
+set path +=.,/usr/include "使用gf命令查找的目录
+set fileencodings=utf 8,gb18030,gbk,gb2312
+filetype indent on "文件类型检查
 ```
 > 在命令行输入vimtutor可以进入vim训练模式进行练习
