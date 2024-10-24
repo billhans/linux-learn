@@ -1,0 +1,11 @@
+OUT:=main
+OBJS:=main.o add.o
+CC:=gcc
+$(OUT):$(OBJS)
+	$(CC) $^ -o $@
+%.o:%.c
+	$(CC) -c $^ -o $@
+.PHONY:clean rebuild
+clean:
+	$(RM) $(OUT) $(OBJS)
+rebuild:clean main
