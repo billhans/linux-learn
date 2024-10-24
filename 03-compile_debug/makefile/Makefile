@@ -1,5 +1,6 @@
 OUT:=main
-OBJS:=main.o add.o
+SRCS:=$(wildcard *.c)
+OBJS:=$(patsubst %.c,%.o,$(SRCS))
 CC:=gcc
 $(OUT):$(OBJS)
 	$(CC) $^ -o $@
