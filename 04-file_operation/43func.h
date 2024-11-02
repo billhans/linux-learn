@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <dirent.h>
+#include <fcntl.h>
 
 #define ARGS_CHECK(argc, num)                 \
     {                                         \
