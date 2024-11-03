@@ -6,11 +6,9 @@ int main(int argc, char * argv[]) {
     int fd = open(argv[1], O_RDWR);
     ERROR_CHECK(fd, -1, "open");
     printf("fd = %d\n", fd);
-    // char buf[10] = {0};
-    // ssize_t ret = read(fd, buf, sizeof(buf));
-    // puts(buf);
-    int i;
-    read(fd, &i, sizeof(i));
-    printf("i = %d\n", i);
+    // char buf[10] = "hello"; // 这里如果是字符串，就是文本文件
+    // write(fd, buf, strlen(buf));
+    int i = 10000000;
+    write(fd, &i, sizeof(i));
     close(fd);
 }
