@@ -17,13 +17,21 @@ int main(int argc, char *argv[]) {
         if (FD_ISSET(fdr, &rdset)) { // 如果管道有数据 则从管道进行读取
             puts("msg from pipe");
             memset(buf, 0, sizeof(buf));
-            read(fdr, buf, sizeof(buf));
+            int ret = read(fdr, buf, sizeof(buf)); // 如果读到文件终止符 退出循环
+            if (ret == 0) {
+                printf("end!\n");
+                break;
+            }
             printf("buf = %s\n", buf);
         }
         if (FD_ISSET(STDIN_FILENO, &rdset)) {
             puts("msg from stdin");
             memset(buf, 0, sizeof(buf));
-            read(STDIN_FILENO, buf, sizeof(buf));
+            int ret = read(STDIN_FILENO, buf, sizeof(buf));
+            if (ret == 0) {
+                write(fdw, "baibai", 6);
+                break;
+            }
             write(fdw, buf, strlen(buf) - 1);
         }
     }
