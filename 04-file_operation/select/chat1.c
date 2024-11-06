@@ -13,7 +13,17 @@ int main(int argc, char *argv[]) {
         // 添加 标准输入和fdr 两个导致阻塞的文件描述符
         FD_SET(STDIN_FILENO, &rdset);
         FD_SET(fdr, &rdset);
-        select(fdr + 1, &rdset, NULL, NULL, NULL); // 陷入等待状态
+
+        struct timeval timeout;
+        timeout.tv_sec = 2;
+        timeout.tv_usec = 500000;
+
+        int sret = select(fdr + 1, &rdset, NULL, NULL, &timeout); // 陷入等待状态
+        if (sret == 0) {
+            printf("time out!\n");
+            continue;
+        }
+        
         if (FD_ISSET(fdr, &rdset)) { // 如果管道有数据 则从管道进行读取
             puts("msg from pipe");
             memset(buf, 0, sizeof(buf));
