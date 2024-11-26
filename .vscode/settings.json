@@ -1,6 +1,8 @@
 {
     "C_Cpp.errorSquiggles": "disabled",
     "files.associations": {
-        "43func.h": "c"
+        "43func.h": "c",
+        "unistd.h": "c",
+        "inet.h": "c"
     }
 }
