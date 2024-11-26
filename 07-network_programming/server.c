@@ -29,7 +29,7 @@
     }
 // 先socket指定服务端地址 调用connect发第一次握手
 int main(int argc, char *argv[]) {
-    // ./connect 192.168.14.9 1234
+    // ./server 192.168.217.129 1234
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
     ERROR_CHECK(sockfd, -1, "socket");
     printf("sockfd = %d\n", sockfd);
@@ -38,13 +38,28 @@ int main(int argc, char *argv[]) {
     addr.sin_port = htons(atoi(argv[2]));
     addr.sin_addr.s_addr = inet_addr(argv[1]);
 
-    int ret = connect(sockfd, (struct sockaddr *)&addr, sizeof(addr));
-    ERROR_CHECK(ret, -1, "connect");
+    // 对于bind而言 addr一定是本地地址 一般用于服务器绑定地址
+    int ret = bind(sockfd, (struct sockaddr *)&addr, sizeof(addr));
+    ERROR_CHECK(ret, -1, "bind");
+    ret = listen(sockfd, 10);
+    ERROR_CHECK(ret, -1, "listen");
+    struct sockaddr_in clientAddr;
+    socklen_t clientAddrLen = sizeof(clientAddr);
+    int netfd = accept(sockfd, (struct sockaddr *)&clientAddr, &clientAddrLen);
+    ERROR_CHECK(netfd, -1, "accept");
+    printf("netfd = %d\n", netfd);
+    printf("client addr length = %d\n", clientAddrLen);
+    printf("client family = %d\n", clientAddr.sin_family);
+    printf("client port = %d\n", ntohs(clientAddr.sin_port));
+    printf("client ip %s\n", inet_ntoa(clientAddr.sin_addr));
 
+    ret = send(netfd, "hello from server", 17, 0);
+    ERROR_CHECK(ret, -1, "send");
     char buf[4096] = {0};
-    ret = recv(sockfd, buf, sizeof(buf), 0);// 客户端由于没有listen清空缓冲区 依然是sockfd
+    ret = recv(netfd, buf, sizeof(buf), 0);
+    ERROR_CHECK(ret, -1, "recv");
     puts(buf);
-    ret = send(sockfd, "nihao from client", 17, 0);
+    close(netfd);
     close(sockfd);
 }
 /*
@@ -53,4 +68,13 @@ tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
 listening on lo, link-type EN10MB (Ethernet), snapshot length 262144 bytes
 15:08:42.792396 IP ubuntu.48004 > ubuntu.1234: Flags [S], seq 362900678, win 65495, options [mss 65495,sackOK,TS val 2686327860 ecr 0,nop,wscale 7], length 0
 15:08:42.792401 IP ubuntu.1234 > ubuntu.48004: Flags [R.], seq 0, ack 362900679, win 0, length 0
+
+bhhh@ubuntu:~/linux-learn/07-network_programming$ ./server 192.168.217.129 1234
+sockfd = 3
+netfd = 4
+client addr length = 16
+client family = 2
+client port = 50816
+client ip 192.168.217.129
+accept 会从原来的socket取出一条全连接队列 新建一个文件对象
 */
