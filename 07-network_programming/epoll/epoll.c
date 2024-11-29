@@ -37,6 +37,7 @@ int main(int argc, char *argv[]) {
     //2 设置监听
 
     //3 陷入阻塞 直到任一监听就绪
+    
     //4 遍历就绪事件队列 处理事件
         close(epfd);
 }
