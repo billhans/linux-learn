@@ -3,6 +3,8 @@
     "files.associations": {
         "43func.h": "c",
         "unistd.h": "c",
-        "inet.h": "c"
+        "inet.h": "c",
+        "pthread.h": "c",
+        "in.h": "c"
     }
 }
